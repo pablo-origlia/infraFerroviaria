@@ -2,7 +2,7 @@ import vagones.*
 
 class Formacion {
 
-  const vagones = []
+  const property vagones = []
   var estaOrganizada = true
 
   method estaOrganizada() = estaOrganizada

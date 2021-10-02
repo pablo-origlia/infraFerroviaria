@@ -1,0 +1,102 @@
+import vagones.*
+import formaciones.*
+
+/*
+ * Está compuesta por cuatro vagones, en este orden:
+ * 1. un vagón de pasajeros de 10 metros de largo por 4 de ancho, ordenado, con baño.
+ * 2. un vagón de pasajeros de 7 metros de largo por 2 de ancho, no ordenado, sin baño.
+ * 3. un vagón de carga de 6800 kg de carga máxima ideal, y con 5 maderas sueltas.
+ * 4. un vagón dormitorio de 8 compartimientos y 3 camas por compartimiento.
+ */
+describe "Primera Formación" {
+
+  const formacion = new Formacion()
+  const vagon1 = new VagonDePasajeros(largo = 10, ancho = 4, estaOrdenado = true, conBanio = true)
+  const vagon2 = new VagonDePasajeros(largo = 7, ancho = 2, estaOrdenado = false, conBanio = false)
+  const vagon3 = new VagonDeCarga(cargaMaximaIdeal = 6800, cantidadDeMaderasSueltas = 5)
+  const vagon4 = new VagonDormitorio(cantidadDeCompartimientos = 8, cantidadDeCamas = 3)
+
+  method initialize() {
+    formacion.agregarVagon(vagon1)
+    formacion.agregarVagon(vagon2)
+    formacion.agregarVagon(vagon3)
+    formacion.agregarVagon(vagon4)
+  }
+
+  test "test a la cantidad de pasajeros en los vagones" {
+    assert.equals(100, vagon1.cantidadMaximaDePasajeros())
+    assert.equals(41, vagon2.cantidadMaximaDePasajeros())
+    assert.equals(0, vagon3.cantidadMaximaDePasajeros())
+    assert.equals(24, vagon4.cantidadMaximaDePasajeros())
+  }
+
+  test "test al peso maximo de los vagones" {
+    assert.equals(10300, vagon1.pesoMaximo())
+    assert.equals(6080, vagon2.pesoMaximo())
+    assert.equals(6300, vagon3.pesoMaximo())
+    assert.equals(7120, vagon4.pesoMaximo())
+  }
+
+  test "test a la carga maxima de los vagones" {
+    assert.equals(300, vagon1.cantidadMaximaDeCarga())
+    assert.equals(800, vagon2.cantidadMaximaDeCarga())
+    assert.equals(4800, vagon3.cantidadMaximaDeCarga())
+    assert.equals(1200, vagon4.cantidadMaximaDeCarga())
+  }
+
+  test "test a los baños de los vagones" {
+    assert.that(vagon1.conBanio())
+    assert.notThat(vagon2.conBanio())
+    assert.notThat(vagon3.conBanio())
+    assert.that(vagon4.conBanio())
+  }
+
+  test "test a la formación SIN mantenimiento" {
+    assert.equals(165, formacion.cantidadMaximaDePasajeros())
+    assert.equals(1, formacion.cantidadVagonesPopulares())
+    assert.notThat(formacion.formacionCargera())
+    assert.equals(4220, formacion.dispersionDePeso())
+    assert.equals(2, formacion.cantidadDeBanios())
+  }
+
+  test "test a la formación CON mantenimiento" {
+    formacion.hacerMantenimiento()
+    assert.equals(180, formacion.cantidadMaximaDePasajeros())
+    assert.equals(2, formacion.cantidadVagonesPopulares())
+    assert.notThat(formacion.formacionCargera())
+    assert.equals(3200, formacion.dispersionDePeso())
+    assert.equals(2, formacion.cantidadDeBanios())
+  }
+
+}
+
+describe "Segunda Formación" {
+
+  const formacion = new Formacion()
+  const vagon1 = new VagonDeCarga(cargaMaximaIdeal = 8000, cantidadDeMaderasSueltas = 1)
+  const vagon2 = new VagonDormitorio(cantidadDeCompartimientos = 15, cantidadDeCamas = 4)
+
+  method initialize() {
+    formacion.agregarVagon(vagon1)
+    formacion.agregarVagon(vagon2)
+  }
+
+  test "test a la formación SIN mantenimiento" {
+    assert.equals(60, formacion.cantidadMaximaDePasajeros())
+    assert.equals(1, formacion.cantidadVagonesPopulares())
+    assert.that(formacion.formacionCargera())
+    assert.equals(900, formacion.dispersionDePeso())
+    assert.equals(1, formacion.cantidadDeBanios())
+  }
+
+  test "test a la formación CON mantenimiento" {
+    formacion.hacerMantenimiento()
+    assert.equals(60, formacion.cantidadMaximaDePasajeros())
+    assert.equals(1, formacion.cantidadVagonesPopulares())
+    assert.that(formacion.formacionCargera())
+    assert.equals(500, formacion.dispersionDePeso())
+    assert.equals(1, formacion.cantidadDeBanios())
+  }
+
+}
+
