@@ -16,6 +16,10 @@ class Formacion {
     vagones.add(vagon)
   }
 
+  method agregarLocomotora(locomotora) {
+    locomotoras.add(locomotora)
+  }
+
   method cantidadMaximaDePasajeros() {
     return vagones.sum({ unVagon => unVagon.cantidadMaximaDePasajeros() })
   }

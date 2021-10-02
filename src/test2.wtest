@@ -1,0 +1,39 @@
+import vagones.*
+import locomotoras.*
+import formaciones2.*
+
+describe "Primera Formación" {
+
+  const formacion = new Formacion()
+  const vagon1 = new VagonDePasajeros(largo = 10, ancho = 4, estaOrdenado = true, conBanio = true)
+  const vagon2 = new VagonDePasajeros(largo = 7, ancho = 2, estaOrdenado = false, conBanio = false)
+  const vagon3 = new VagonDeCarga(cargaMaximaIdeal = 6800, cantidadDeMaderasSueltas = 5)
+  const vagon4 = new VagonDormitorio(cantidadDeCompartimientos = 8, cantidadDeCamas = 3)
+  const locomotora1 = new Locomotora(peso = 3000, pesoArrastre = 20000, velocidadMaxima = 75)
+  const locomotora2 = new Locomotora(peso = 5000, pesoArrastre = 22000, velocidadMaxima = 60)
+
+  method initialize() {
+    formacion.agregarVagon(vagon1)
+    formacion.agregarVagon(vagon2)
+    formacion.agregarVagon(vagon3)
+    formacion.agregarVagon(vagon4)
+    formacion.agregarLocomotora(locomotora1)
+  }
+
+  test "test a la formacion con 1 sola locomotora" {
+    assert.equals(75, formacion.velocidadMaxima())
+    assert.that(formacion.esEficiente())
+    assert.notThat(formacion.puedeMoverse())
+    assert.equals(12800, formacion.kilosDeEmpujeFaltantes())
+  }
+
+  test "test a la formacion con 2 locomotoras" {
+    formacion.agregarLocomotora(locomotora2)
+    assert.equals(60, formacion.velocidadMaxima())
+    assert.notThat(formacion.esEficiente())
+    assert.that(formacion.puedeMoverse())
+    assert.equals(0, formacion.kilosDeEmpujeFaltantes())
+  }
+
+}
+
