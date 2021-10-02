@@ -48,9 +48,13 @@ class Formacion {
 
   method esEficiente() = locomotoras.all({ unaLocomotora => unaLocomotora.esEficiente() })
 
-  method puedeMoverse() = locomotoras.sum({ unaLocomotora => unaLocomotora.pesoArrastre() }) >= (locomotoras.sum({ unaLocomotora => unaLocomotora.peso() }) + vagones.sum({ unVagon => unVagon.pesoMaximo() }))
+  method pesoMaximo() = (locomotoras.sum({ unaLocomotora => unaLocomotora.peso() }) + vagones.sum({ unVagon => unVagon.pesoMaximo() }))
+
+  method puedeMoverse() = locomotoras.sum({ unaLocomotora => unaLocomotora.pesoArrastre() }) >= self.pesoMaximo()
 
   method kilosDeEmpujeFaltantes() = (locomotoras.sum({ unaLocomotora => unaLocomotora.peso() }) + vagones.sum({ unVagon => unVagon.pesoMaximo() }) - locomotoras.sum({ unaLocomotora => unaLocomotora.pesoArrastre() })).max(0)
+
+  method esCompleja() = ((vagones.size() + locomotoras.size()) > 8) or (self.pesoMaximo() > 80000)
 
 }
 
